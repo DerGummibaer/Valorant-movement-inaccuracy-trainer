@@ -1,0 +1,54 @@
+name: Build and Release
+
+on:
+  push:
+    tags:
+      - "v*"   # triggers on tags like v1.0, v1.2.3
+
+jobs:
+  build:
+    runs-on: windows-latest
+
+    steps:
+      - name: Checkout source
+        uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: "3.11"
+
+      - name: Install dependencies
+        run: pip install pynput pyinstaller
+
+      - name: Build exe
+        run: |
+          pyinstaller `
+            --onefile `
+            --noconsole `
+            --name "StillnessTrainer" `
+            stillness_trainer.py
+
+      - name: Upload to release
+        uses: softprops/action-gh-release@v2
+        with:
+          files: dist/StillnessTrainer.exe
+          body: |
+            ## Stillness Trainer ${{ github.ref_name }}
+
+            ### For most people
+            Download **StillnessTrainer.exe** and run it.
+
+            > **Antivirus warning:** Windows Defender may flag this file because it uses
+            > global input hooks to read keypresses — the same mechanism keyloggers use.
+            > This is a known false positive with PyInstaller. You can verify exactly what
+            > this exe does by reading the source code and the build log linked below.
+
+            ### For the cautious
+            Clone the repo and run from source — no exe required:
+            ```
+            pip install pynput
+            python stillness_trainer.py
+            ```
+
+            **Build log:** ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
