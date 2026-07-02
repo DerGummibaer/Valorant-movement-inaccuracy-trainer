@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Valorant Stillness Trainer
 
 A training tool that teaches you to wait for full movement recovery before shooting.
@@ -95,3 +96,7 @@ antivirus) see exactly what the code does before executing it.
 **My settings aren't saving.**
 Make sure the folder containing `stillness_trainer.py` isn't read-only.
 Settings are written to `trainer_settings.json` in the same folder.
+=======
+# Valorant-movement-inaccuracy-trainer
+A small lightweight program that listens to your keypresses even ingame and compares the time between your movement keys being let go and your mouse 1 clicking to tell you if you shot too early or could shoot earlier
+>>>>>>> beaea1a5c663fcda25140bc84c6a893672428584

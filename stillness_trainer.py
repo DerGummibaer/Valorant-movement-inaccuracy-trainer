@@ -535,6 +535,8 @@ class StillnessTrainer(tk.Tk):
         now = time.perf_counter()
         if self.is_still:
             ms = int((now - self.still_at) * 1000)
+            if ms > 300:
+                return   # too long after stopping — not a meaningful rep
             self.hits += 1
             self.reaction_times.append(ms)
             self.best_reaction = min(self.best_reaction, ms) if self.best_reaction else ms
