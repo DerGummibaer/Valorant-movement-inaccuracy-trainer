@@ -1,0 +1,39 @@
+plugins {
+    id 'com.android.application'
+}
+
+android {
+    namespace 'de.dergummibaer.cardprinter'
+    compileSdk 34
+
+    defaultConfig {
+        applicationId 'de.dergummibaer.cardprinter'
+        minSdk 26
+        targetSdk 34
+        versionCode 2
+        versionName '1.1'
+    }
+
+    signingConfigs {
+        // Fixed, deliberately public key so each new build installs over the last one.
+        // Fine for personal sideloading; not meant for the Play Store.
+        debug {
+            storeFile file('sideload.keystore')
+            storePassword 'cardprinter'
+            keyAlias 'cardprinter'
+            keyPassword 'cardprinter'
+        }
+    }
+
+    buildTypes {
+        release {
+            minifyEnabled false
+            signingConfig signingConfigs.debug
+        }
+    }
+
+    compileOptions {
+        sourceCompatibility JavaVersion.VERSION_17
+        targetCompatibility JavaVersion.VERSION_17
+    }
+}

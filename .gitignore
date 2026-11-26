@@ -1,6 +1,6 @@
-dist/
+.gradle/
 build/
-*.spec
-__pycache__/
-*.pyc
-trainer_settings.json
+local.properties
+*.iml
+.idea/
+captures/
