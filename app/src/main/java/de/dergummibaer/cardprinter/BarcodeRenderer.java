@@ -14,7 +14,9 @@ import android.graphics.Typeface;
  */
 public final class BarcodeRenderer {
 
-    public static final int QUIET = 10;   // blank modules each side (scanner requirement)
+    // Minimum blank modules each side inside the image. The label's unprinted edge (~1 mm each
+    // side beyond the 48 mm print head) adds to this, giving the scanner its ~10-module margin.
+    public static final int QUIET = 6;
 
     private BarcodeRenderer() {}
 

@@ -63,6 +63,7 @@ public class MainActivity extends Activity implements NfcAdapter.ReaderCallback 
     private ImageView preview;
     private CheckBox autoPrint;
     private Bitmap current;
+    private BluetoothDevice lastDevice;
     private String currentText = "";
 
     private int dp(float v) {
@@ -285,6 +286,18 @@ public class MainActivity extends Activity implements NfcAdapter.ReaderCallback 
         io.execute(() -> {
             try {
                 printer.printImage(bmp, d);
+            } catch (java.io.IOException e) {
+                // The link drops when the printer sleeps; reconnect once and retry.
+                log("Connection lost (" + e.getMessage() + "), reconnecting...");
+                printer.close();
+                if (lastDevice == null) { log("No printer to reconnect to."); return; }
+                try {
+                    printer.connect(lastDevice);
+                    printer.printImage(bmp, d);
+                } catch (Exception e2) {
+                    log("Print error: " + e2.getMessage());
+                    ui.post(() -> status.setText("Printer not reachable \u2014 is it on?"));
+                }
             } catch (Exception e) {
                 log("Print error: " + e.getMessage());
             }
@@ -357,6 +370,7 @@ public class MainActivity extends Activity implements NfcAdapter.ReaderCallback 
     }
 
     private void connect(BluetoothDevice d) {
+        lastDevice = d;
         status.setText("Connecting to printer...");
         io.execute(() -> {
             try {
