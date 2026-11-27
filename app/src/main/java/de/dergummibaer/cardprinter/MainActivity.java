@@ -45,7 +45,7 @@ public class MainActivity extends Activity implements NfcAdapter.ReaderCallback 
     private static final int LABEL_W = 384;   // print-head width in dots (B1)
     private static final int LABEL_H = 240;   // 30 mm label at 203 dpi
     private int density = 3;                  // 1..5, thermal darkness
-    private int suffix = 1;                    // appended to the barcode: 0 none, 1 Tab, 2 Enter
+    private int suffix = 2;                    // appended to the barcode: 0 none, 1 Tab, 2 Enter (card readers send Enter)
 
     private static final int COBALT = Color.parseColor("#1240E0");
     private static final int MUTE = Color.parseColor("#4A5470");
@@ -89,7 +89,7 @@ public class MainActivity extends Activity implements NfcAdapter.ReaderCallback 
         super.onCreate(saved);
         prefs = getSharedPreferences("cardprinter", MODE_PRIVATE);
         density = prefs.getInt("density", 3);
-        suffix = prefs.getInt("suffix", 1);
+        suffix = prefs.getInt("suffix", 2);
         BluetoothManager bm = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bt = bm != null ? bm.getAdapter() : BluetoothAdapter.getDefaultAdapter();
         getWindow().setStatusBarColor(COBALT);

@@ -38,7 +38,7 @@ then `./gradlew installDebug` with the phone connected.
 - **Auto-print on scan**: print automatically the moment a card is read.
 - **Density -/+**: thermal darkness (1-5). Raise it if bars look faint.
 - **After the code**: what the scanner "types" after the ID - None, **Tab** (jumps to the
-  next field, the default) or **Enter** (submits). This is encoded into the barcode itself,
+  next field) or **Enter** (the default - same as the RFID card reader). This is encoded into the barcode itself,
   so it works even on a scanner you can't configure. The printed number still shows only the
   ID; the Tab/Enter is invisible but in the bars.
 - The log at the bottom shows each step and any errors (handy if printing misbehaves).
