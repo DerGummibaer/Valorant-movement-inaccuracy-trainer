@@ -45,7 +45,9 @@ public class MainActivity extends Activity implements NfcAdapter.ReaderCallback 
     private static final int LABEL_W = 384;   // print-head width in dots (B1)
     private static final int LABEL_H = 240;   // 30 mm label at 203 dpi
     private int density = 3;                  // 1..5, thermal darkness
-    private int suffix = 2;                    // appended to the barcode: 0 none, 1 Tab, 2 Enter (card readers send Enter)
+    private int suffix = 3;                    // appended to the barcode: 0 none, 1 Tab, 2 Enter, 3 Space
+    // Space fills the 15-char RFID field so the terminal moves on without needing
+    // the scanner's Function Key Mapping (which Enter/Tab would require).
 
     private static final int COBALT = Color.parseColor("#1240E0");
     private static final int MUTE = Color.parseColor("#4A5470");
@@ -89,7 +91,7 @@ public class MainActivity extends Activity implements NfcAdapter.ReaderCallback 
         super.onCreate(saved);
         prefs = getSharedPreferences("cardprinter", MODE_PRIVATE);
         density = prefs.getInt("density", 3);
-        suffix = prefs.getInt("suffix", 2);
+        suffix = prefs.getInt("suffix_v2", 3);
         BluetoothManager bm = (BluetoothManager) getSystemService(Context.BLUETOOTH_SERVICE);
         bt = bm != null ? bm.getAdapter() : BluetoothAdapter.getDefaultAdapter();
         getWindow().setStatusBarColor(COBALT);
@@ -256,20 +258,20 @@ public class MainActivity extends Activity implements NfcAdapter.ReaderCallback 
     }
 
     private void cycleSuffix() {
-        suffix = (suffix + 1) % 3;
-        prefs.edit().putInt("suffix", suffix).apply();
+        suffix = (suffix + 1) % 4;
+        prefs.edit().putInt("suffix_v2", suffix).apply();
         updateSuffixLabel();
         renderPreview();   // show the change without reprinting
     }
 
     private void updateSuffixLabel() {
-        String[] names = {"None", "Tab ⇥", "Enter ⏎"};
+        String[] names = {"None", "Tab ⇥", "Enter ⏎", "Space ␣"};
         suffixBtn.setText(names[suffix]);
     }
 
     /** The characters appended to the barcode data (not shown in the printed number). */
     private String suffixChars() {
-        return suffix == 1 ? "\t" : suffix == 2 ? "\r" : "";
+        return suffix == 1 ? "\t" : suffix == 2 ? "\r" : suffix == 3 ? " " : "";
     }
 
     // ---- printing ----
